@@ -1,6 +1,6 @@
 ---
 name: diseno-powerpoint
-description: Crea presentaciones de PowerPoint (.pptx) de LUJO — estética negra premium con dorado y naranja, tipografía fuerte, iconos, imágenes de apoyo (IA/reales) y notas del orador. Úsala siempre que el usuario quiera crear, diseñar o mejorar un deck, diapositivas, pitch, clase o presentación profesional/elegante. Incluye la metodología completa de build (PptxGenJS), render y QA visual con PowerPoint, fuentes legibles en móvil, imágenes con Kie AI / Apify, y animaciones.
+description: Crea presentaciones de PowerPoint (.pptx) de LUJO, la "presentación premium" de Diego. Dos modos — (1) estética fija negra con dorado y naranja para sus programas (IMPERIO, Sistema IA Sales) y (2) MÉTODO EDITORIAL para clientes, lives y webinars de venta - estilo tomado de una referencia y de los colores reales de la marca, cada slide diseñada según lo que dice, material real con imágenes a la medida y doble revisión. Úsala siempre que el usuario quiera crear, diseñar o mejorar un deck, diapositivas, pitch, clase, live, webinar o presentación profesional/elegante, sobre todo si menciona una referencia, la marca o la web de un cliente. Incluye build con PptxGenJS, render y QA visual con PowerPoint, fuentes legibles en móvil, imágenes con Kie AI / Apify, plantilla de código y scripts.
 ---
 
 # Diseño PowerPoint (Lujo) — by Diego
@@ -8,7 +8,25 @@ description: Crea presentaciones de PowerPoint (.pptx) de LUJO — estética neg
 Crea presentaciones con calidad de estudio: **negro profundo + dorado metálico + naranja**, tipografía Arial Black, líneas finas elegantes, iconos y apoyos visuales. Esta skill encierra una metodología probada de extremo a extremo: **construir con código → renderizar y revisar visualmente → pulir**. Ver `PREFERENCIAS.md` para los gustos específicos de Diego e `IMAGES.md` para el flujo de imágenes.
 
 ## Cuándo usar
-Cualquier pedido de "crea/diseña/mejora una presentación, deck, diapositivas, pitch, clase, slides" — sobre todo si piden algo **elegante, profesional, premium o de lujo**.
+Cualquier pedido de "crea/diseña/mejora una presentación, deck, diapositivas, pitch, clase, slides, live, webinar" — sobre todo si piden algo **elegante, profesional, premium o de lujo**.
+
+## 0) Elige el modo (antes de todo)
+
+| Si el deck es… | Modo | Qué seguir |
+|---|---|---|
+| Una clase o material de **los programas de Diego** (IMPERIO, Sistema IA Sales) | **Lujo fijo** | Secciones 1–8 de este archivo |
+| Para un **cliente**, un **live / webinar de venta**, o hay una **referencia** o una **web de la marca** | **Editorial** | **`METODO-EDITORIAL.md`** + `templates/` + `scripts/` (las secciones 2–6 de aquí siguen aplicando) |
+
+El modo editorial es el que Diego calificó como *"el nivel está muy alto"* (oct 2026). Sus 5 pasos:
+1. **Dirección de arte:** estilo de la referencia + colores reales sacados de la web de la marca
+   (`scripts/extract-palette.js`), un solo color para las acciones, fuentes instaladas equivalentes.
+2. **Cada slide diseñada según lo que dice** (catálogo de diseños en el método), nunca la misma plantilla seguida.
+3. **Material real + imágenes a la medida:** fotos del cliente o cuadros de sus videos, antes/después propios,
+   e imágenes de Kie con la misma paleta y espacio libre para el texto (`scripts/gen_images.py`).
+4. **Construir** con `templates/build-editorial.js` + `brand.json` + fondos de `scripts/make_backgrounds.py`;
+   guion en las notas; datos faltantes como recuadros pendientes (nunca inventados).
+5. **Doble revisión:** la tuya con hojas de contacto (`scripts/render.ps1` + `scripts/contact_sheets.py`) y la
+   de un **revisor independiente** (subagente) con el brief del método. Entrega PPTX + PDF (`scripts/export-pdf.ps1`).
 
 ---
 
@@ -50,7 +68,9 @@ Estructura del `build.js`:
 2. **Nunca opacidad en hex de 8 dígitos**; usa `transparency`/`opacity` aparte.
 3. **Líneas: nunca ancho/alto negativo ni una línea de tamaño 0×0** → genera XML que **PowerPoint rechaza al abrir** (aunque otras herramientas la lean). Líneas verticales = `w:0, h>0`; horizontales = `h:0, w>0`; diagonales: usa caja positiva + `flipH/flipV`.
 4. **Objetos de sombra frescos por shape** (PptxGenJS los muta in-place): usa una *factory* `makeShadow()`.
-5. Viñetas: `bullet:true` o tu propio prefijo (nunca ambos). Degradados: no nativos → usar imagen de fondo o apilar rectángulos translúcidos.
+5. Viñetas: `bullet:true` o tu propio prefijo (nunca ambos). Degradados: no nativos → usar imagen de fondo o apilar rectángulos translúcidos (o un PNG con degradado hecho con sharp, como en la plantilla).
+6. **Run de texto vacío con salto de línea** (`{text:"", options:{breakLine:true}}`): PowerPoint dice "no se pudo abrir el archivo" aunque el XML sea válido. Pasa al partir texto por `\n` junto a un marcador. El helper `runs()` de la plantilla pone el salto en el run anterior. Para encontrar la slide culpable: construye por rangos (`SLIDES=1-10`) y abre cada archivo con `scripts/test-open.ps1`.
+7. **`sizing: {type:"cover"}` deforma** si PptxGenJS no conoce el tamaño real de la imagen: recorta antes a la proporción exacta de la caja con sharp (helper `fit()`).
 
 ---
 
@@ -78,7 +98,9 @@ $pres = $ppt.Presentations.Open($pptx, -1, 0, 0)   # ReadOnly
 $pres.Export($imgDir, "PNG", 1920, 1080)
 $pres.Close(); $ppt.Quit()
 ```
-**QA obligatorio (asume que hay errores):** abre los PNG con la Read tool — idealmente con un **subagente de ojos frescos** — y busca desbordes, solapamientos, texto cortado, bajo contraste, gaps disparejos, números grandes con cifras "oldstyle" (usar Cambria si Georgia las muestra raras), notas pegadas al footer. Corrige y **re-renderiza** hasta que un pase no encuentre nada nuevo.
+**QA obligatorio y DOBLE (asume que hay errores):**
+1. **Tuyo:** `scripts/render.ps1` → `scripts/contact_sheets.py` (hojas 2×2 numeradas) → abre todas con la Read tool. Busca desbordes, solapamientos, texto cortado o encima de una cara, palabras solas al final de una línea (únelas con ` `), bajo contraste, gaps disparejos, números con cifras "oldstyle" (Cambria si Georgia las muestra raras), notas pegadas al footer. Corrige y re-renderiza solo las cambiadas (`--pick`).
+2. **Revisor independiente:** un subagente de ojos frescos con el brief de `METODO-EDITORIAL.md` (compara contra el texto fuente y caza defectos visuales). Aplica lo que encuentre y re-renderiza. En el live de oct 2026 encontró ~20 detalles que el primer pase no vio (una cara recortada, una CLABE ilegible en celular).
 
 ---
 
@@ -114,9 +136,10 @@ PptxGenJS **no** anima. Si el usuario las quiere, se agregan **de último** por 
 ---
 
 ## 8) Checklist de flujo
-1. Lee TODO el copy/brief → decide el visual de cada slide (icono / imagen / fondo / nada).
-2. Construye con PptxGenJS (FS centralizado, helpers, paleta de lujo). Notas del orador con `addNotes` si las hay.
-3. Renderiza a PNG (PowerPoint COM) y haz **QA visual con subagente**. Corrige y re-renderiza.
-4. (Opcional) Imágenes de apoyo con Kie AI / Apify — avisando del costo.
+0. Elige el modo (sección 0). Si es editorial, sigue `METODO-EDITORIAL.md` paso a paso.
+1. Lee TODO el copy/brief → decide el diseño y el visual de cada slide según lo que dice (icono / foto real / imagen IA / fondo / solo tipografía).
+2. Construye con PptxGenJS (FS centralizado, helpers; en editorial, `templates/build-editorial.js` + `brand.json`). Guion en notas con `addNotes`.
+3. Renderiza a PNG (PowerPoint COM) y haz la **doble revisión** (tuya + revisor independiente). Corrige y re-renderiza.
+4. Imágenes de apoyo con Kie AI / Apify — avisando del costo (en lote: `scripts/gen_images.py`).
 5. (Opcional, al final) Animaciones por COM, sobre copia `-ANIMADO`.
-6. Entrega el `.pptx`. Las fuentes (Arial Black, Arial, Consolas, Cambria) son estándar de Windows → se ve idéntico.
+6. Entrega el `.pptx` **y un PDF** (`scripts/export-pdf.ps1`) para verlo en el celular. Usa solo fuentes instaladas en Windows → se ve idéntico. Al entregar, lista los datos pendientes y las decisiones que tomaste por tu cuenta.
