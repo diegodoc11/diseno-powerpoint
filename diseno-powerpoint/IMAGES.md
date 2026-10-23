@@ -14,6 +14,20 @@
    calidad. Nunca `nano-banana-pro`.
 5. **Avisa antes de gastar**: propón al usuario qué slide la necesita y por qué.
 
+## Modo editorial: material real e imágenes a la medida
+
+En decks de clientes (ver `METODO-EDITORIAL.md`) el orden cambia: **primero lo real**, luego IA a la medida.
+- **Fotos reales del cliente:** si solo hay videos, saca cuadros con
+  `ffmpeg -ss 3 -i clip.mp4 -frames:v 1 -q:v 2 foto.jpg` (recepción, el experto trabajando…).
+- **Personas recortadas del fondo:** `rembg` con `new_session("birefnet-general")` (modelo en `~/.u2net`);
+  sirve para ponerlas sobre los fondos de la marca o en un círculo.
+- **Quitar letreros o logos viejos:** recortando con PIL, nunca con IA (la IA retoca la piel y falsea resultados).
+- **Imágenes IA pensadas para la slide:** misma paleta del deck en el prompt + dónde va el sujeto + dónde queda
+  libre el texto (*"subject on the right third, the left two thirds dark and empty for text"*). En lote y en
+  paralelo con `scripts/gen_images.py images.json`; revisa todas en una hoja de contactos antes de usarlas.
+- **Personas generadas que ilustran una historia real** → rótulo "Imagen ilustrativa".
+- **Recorta a la proporción exacta de la caja** (helper `fit()` con sharp) en vez de confiar en `sizing: cover`.
+
 ## Cómo decido el visual de cada slide (leer el texto PRIMERO)
 
 1. **Lee primero TODO el texto/esquema** de la presentación.

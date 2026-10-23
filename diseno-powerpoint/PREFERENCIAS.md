@@ -30,6 +30,17 @@ Estas son las preferencias confirmadas para los decks de Diego. Aplícalas por d
 - **Nunca** referenciar otros módulos por número, solo por nombre.
 - Modelos de IA por **nivel** (Haiku/Sonnet/Opus), sin números de versión en pantalla.
 
+## Decks de clientes, lives y webinars → modo editorial
+- Para todo lo que **no** es un programa de Diego, usar `METODO-EDITORIAL.md`. Es el que Diego calificó como
+  *"el nivel de esa presentación está muy alto… ya no voy a usar Claude Design"* (live de una clínica, oct 2026).
+- **Nunca** aplicar la paleta negra/naranja de IMPERIO a un cliente: estilo de la referencia que él pase +
+  colores reales de la web de la marca.
+- Lo que más valoró: el estilo tipo revista (serif con palabras clave en itálica dorada), que cada slide se vea
+  distinta según lo que dice, las fotos reales del cliente y la revisión doble antes de entregar.
+- Entregar **PPTX + PDF**, el guion en las notas, y una lista corta de datos pendientes y decisiones tomadas.
+- Las imágenes de Kie para clientes salen del modelo barato y se piden en lote; él autoriza el gasto cuando
+  dice "puedes crear imágenes con Kie" (avisar el total al final).
+
 ## Estilos por programa
 - **Financial Elite** (carbón + dorado + serif) es un buen default cuando se pide "máximo lujo / inversores". El estilo negro+dorado+naranja es la firma general de los programas de Diego.
 

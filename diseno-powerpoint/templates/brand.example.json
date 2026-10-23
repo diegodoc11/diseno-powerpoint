@@ -1,0 +1,28 @@
+{
+  "_ayuda": "Copia como brand.json en la carpeta del proyecto. Colores sin #. Saca los reales de la web de la marca con scripts/extract-palette.js. 'action' es el UNICO color para botones y llamados a escribir en el chat.",
+  "name": "MI MARCA",
+  "output": "presentacion.pptx",
+  "logo_dark_bg": "",
+  "logo_light_bg": "",
+  "logo_ratio": 2.75,
+  "fonts": { "serif": "Garamond", "sans": "Century Gothic" },
+  "colors": {
+    "bg": "070707",
+    "text": "F2F2F2",
+    "muted": "A5A5A5",
+    "accent": "E5B668",
+    "accentDeep": "9A6B2C",
+    "depth": "58071D",
+    "depthDark": "2A0610",
+    "action": "D42664",
+    "actionLight": "EE538C",
+    "card": "120E0C",
+    "lineDark": "5A482C",
+    "soft": "D9C9CC",
+    "ivory": "F6F0E7",
+    "ink": "1C0B10",
+    "ink2": "5A4A4E",
+    "lineLight": "DCCDB8",
+    "cardLight": "FFFCF7"
+  }
+}
