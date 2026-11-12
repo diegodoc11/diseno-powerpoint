@@ -32,6 +32,7 @@ npx skills add https://github.com/diegodoc11/diseno-powerpoint --skill diseno-po
   - `extract-palette.js` — saca colores y fuentes de la web de una marca.
   - `make_backgrounds.py` — fondos con los colores de la marca.
   - `render.ps1`, `contact_sheets.py`, `test-open.ps1`, `export-pdf.ps1` — render, hojas de revisión, diagnóstico y PDF.
+  - `diff_decks.py` — compara el deck que el cliente editó a mano contra el tuyo (qué cambió y qué renglón suyo falta).
 
 ## Requisitos
 - Node.js con PptxGenJS, react, react-dom, react-icons y sharp para construir el `.pptx`.
