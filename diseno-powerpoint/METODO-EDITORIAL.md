@@ -104,6 +104,21 @@ pequeño (sans) a la izquierda y monto alineado a la derecha; filete punteado en
    "Slide N — problema → arreglo".
 3. Aplica lo que encuentre, re-renderiza y entrega **PPTX + PDF** (`scripts/export-pdf.ps1`).
 
+## Paso 6 · Cuando el cliente edita el deck a mano
+
+Es lo normal: el cliente abre el .pptx, cambia textos, mueve fotos o escribe apuntes para él mismo, y te pide
+"ajústalo". La regla es **no deshacer nada de lo suyo: solo diseño y ortografía.**
+
+1. Copia su archivo a una carpeta aparte (nunca trabajes encima del suyo) y regenera tu versión anterior.
+2. `scripts/diff_decks.py <tuyo.pptx> <suyo.pptx>` → lista por slide de textos, cajas, fotos y notas que cambió.
+3. Pasa cada cambio al build (el build es la fuente: lo editado a mano se pierde al regenerar).
+4. Genera una versión **nueva** (`v3`, `v4`…). La salida por defecto del build nunca debe apuntar al archivo
+   que editó el cliente.
+5. Antes de entregar: `scripts/diff_decks.py <suyo.pptx> <nuevo.pptx> --lineas` → cada renglón suyo debe seguir
+   ahí. Las únicas diferencias permitidas: tildes, saltos de línea, espaciado, y lo que él pidió quitar o llenar.
+6. Si escribió un apunte en pantalla (p. ej. "Historia de mi cosmetóloga…"), **se queda en pantalla**: es su
+   ayuda para no perderse en vivo. Pregunta antes de moverlo a las notas.
+
 ### Brief para el revisor independiente (copiar y completar)
 
 > Haz un control de calidad con ojos frescos de un deck de N slides. No edites nada: solo mira y reporta.
@@ -120,6 +135,17 @@ pequeño (sans) a la izquierda y monto alineado a la derecha; filete punteado en
 ---
 
 ## Trampas aprendidas
+
+- **El presentador lee las notas de corrido, tal cual.** En un live real la doctora leyó en voz alta las
+  acotaciones "(Leer nombres: 'Mónica ya reservó…')" y los ejemplos de chat inventados, y sonó falso. En el
+  guion y en las notas va **solo lo que la persona dice**: nada entre paréntesis, nada de "(pausa)", "(risa)",
+  "(opcional)", ni ejemplos de lo que "escribe la gente". Si hace falta una instrucción, va en el ensayo, no en
+  el guion.
+- **Separador entre un título grande y un detalle chico** ("Nariz · rinomodelación"): pon los espacios y el
+  punto dentro del run chico (`` `${a}*  ·  ${b}*` ``); si los espacios quedan en el tamaño grande, el punto se
+  ve pegado al detalle. Revisa que el renglón no se parta al cambiar el espaciado.
+- **PowerPoint es de una sola instancia:** si el cliente lo tiene abierto, el render por COM se engancha a su
+  ventana. Los scripts solo cierran lo que abren; aun así, revisa `Get-Process POWERPNT` antes de renderizar.
 
 - **Un run de texto vacío con salto de línea hace que PowerPoint no abra el archivo**, aunque el XML sea
   válido. El helper `runs()` ya lo evita. Si pasa: construye por rangos (`SLIDES=1-10`) y abre cada uno con

@@ -61,7 +61,8 @@ Estructura del `build.js`:
 - **Centraliza los tamaños de fuente en una constante `FS`** (ver §3) para escalar de una vez.
 - Helpers reutilizables: `base` (fondo negro), `hline`/`vline` (líneas finas), `eyebrow` (rótulo dorado con tracking), `footer` (marca + número), `iconRing` (icono en círculo dorado), `panel` (tarjeta con borde fino), `bullets` (viñetas con chevron `›` dorado), `closing`/`banner` (caja destacada con barra naranja + borde dorado), `cmdBox` (caja tipo terminal, fuente Consolas), `partHeader` (número grande dorado + título + verbo + icono + línea), `title`.
 - Patrones de slide: tarjetas (2/3/4 col o grid 3×3), comparación 2 columnas, listas con icono+valor a la derecha, timeline/escalera, mockups armados con formas (búsqueda Google, tarjeta de negocio, etc.).
-- **Notas del orador (guion):** `slide.addNotes("...")` → va al panel de notas del presentador, NUNCA como texto visible.
+- **Notas del orador (guion):** `slide.addNotes("...")` → va al panel de notas del presentador, NUNCA como texto visible. Solo lo que la persona dice: el presentador lo lee de corrido, así que nada de acotaciones entre paréntesis ni ejemplos inventados.
+- **Si el cliente editó el deck a mano:** no deshagas nada suyo, solo diseño y ortografía (ver Paso 6 de `METODO-EDITORIAL.md` y `scripts/diff_decks.py`).
 
 ### ⚠️ Errores de PptxGenJS que CORROMPEN el archivo (evítalos)
 1. **Color hex sin `#`**: `color:"FF0000"` ✅ — `"#FF0000"` ❌ corrompe.
